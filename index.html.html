@@ -1,0 +1,647 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Análise de Motivadores | Apontando Caminhos</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=DM+Sans:wght@300;400;500&display=swap');
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: #0a1628;
+    color: #e8edf5;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+  }
+
+  .container {
+    width: 100%;
+    max-width: 640px;
+  }
+
+  .header {
+    text-align: center;
+    margin-bottom: 40px;
+  }
+
+  .brand {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: #5b8dee;
+    margin-bottom: 16px;
+  }
+
+  .title {
+    font-family: 'Playfair Display', serif;
+    font-size: 28px;
+    font-weight: 600;
+    color: #ffffff;
+    line-height: 1.3;
+    margin-bottom: 8px;
+  }
+
+  .subtitle {
+    font-size: 14px;
+    color: #8a9bb8;
+    font-weight: 300;
+  }
+
+  .card {
+    background: #111e35;
+    border: 1px solid #1e3057;
+    border-radius: 12px;
+    padding: 36px;
+  }
+
+  .step { display: none; }
+  .step.active { display: block; }
+
+  .step-label {
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: #5b8dee;
+    margin-bottom: 20px;
+  }
+
+  .step-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 20px;
+    color: #ffffff;
+    margin-bottom: 8px;
+    line-height: 1.4;
+  }
+
+  .step-desc {
+    font-size: 14px;
+    color: #8a9bb8;
+    margin-bottom: 28px;
+    line-height: 1.6;
+  }
+
+  .field {
+    margin-bottom: 20px;
+  }
+
+  label {
+    display: block;
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: #5b8dee;
+    margin-bottom: 8px;
+  }
+
+  input[type="text"] {
+    width: 100%;
+    background: #0a1628;
+    border: 1px solid #1e3057;
+    border-radius: 8px;
+    padding: 12px 16px;
+    color: #e8edf5;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+
+  input[type="text"]:focus {
+    border-color: #5b8dee;
+  }
+
+  input[type="text"]::placeholder { color: #3d5270; }
+
+  .btn {
+    width: 100%;
+    background: #5b8dee;
+    color: #ffffff;
+    border: none;
+    border-radius: 8px;
+    padding: 14px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.1s;
+    margin-top: 8px;
+  }
+
+  .btn:hover { background: #4a7de0; }
+  .btn:active { transform: scale(0.99); }
+  .btn:disabled { background: #2a3d5c; color: #5a7090; cursor: not-allowed; }
+
+  .progress-bar {
+    background: #1e3057;
+    border-radius: 4px;
+    height: 4px;
+    margin-bottom: 28px;
+    overflow: hidden;
+  }
+
+  .progress-fill {
+    background: #5b8dee;
+    height: 100%;
+    border-radius: 4px;
+    transition: width 0.4s ease;
+  }
+
+  .question-counter {
+    font-size: 12px;
+    color: #5b8dee;
+    font-weight: 500;
+    margin-bottom: 6px;
+  }
+
+  .question-text {
+    font-family: 'Playfair Display', serif;
+    font-size: 18px;
+    color: #ffffff;
+    line-height: 1.5;
+    margin-bottom: 28px;
+  }
+
+  .scale {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .scale-option {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    background: #0a1628;
+    border: 1px solid #1e3057;
+    border-radius: 8px;
+    padding: 12px 16px;
+    cursor: pointer;
+    transition: border-color 0.15s, background 0.15s;
+  }
+
+  .scale-option:hover {
+    border-color: #5b8dee;
+    background: #0f1e38;
+  }
+
+  .scale-option.selected {
+    border-color: #5b8dee;
+    background: #142040;
+  }
+
+  .scale-num {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: #1e3057;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    font-weight: 500;
+    color: #5b8dee;
+    flex-shrink: 0;
+    transition: background 0.15s;
+  }
+
+  .scale-option.selected .scale-num {
+    background: #5b8dee;
+    color: #fff;
+  }
+
+  .scale-label {
+    font-size: 13px;
+    color: #8a9bb8;
+  }
+
+  .scale-option.selected .scale-label { color: #c8d8f0; }
+
+  .loading {
+    text-align: center;
+    padding: 20px 0;
+  }
+
+  .spinner {
+    width: 36px;
+    height: 36px;
+    border: 3px solid #1e3057;
+    border-top-color: #5b8dee;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+    margin: 0 auto 16px;
+  }
+
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  .loading-text {
+    font-size: 14px;
+    color: #8a9bb8;
+  }
+
+  .report-box {
+    background: #0a1628;
+    border: 1px solid #1e3057;
+    border-radius: 8px;
+    padding: 20px;
+    font-size: 13px;
+    line-height: 1.7;
+    color: #c8d8f0;
+    white-space: pre-wrap;
+    max-height: 360px;
+    overflow-y: auto;
+    margin-bottom: 20px;
+    font-family: 'DM Sans', sans-serif;
+  }
+
+  .success-msg {
+    background: #0d2a1a;
+    border: 1px solid #1a5c35;
+    border-radius: 8px;
+    padding: 14px 18px;
+    font-size: 13px;
+    color: #4caf82;
+    margin-bottom: 16px;
+    display: none;
+  }
+
+  .error-msg {
+    background: #2a0d0d;
+    border: 1px solid #5c1a1a;
+    border-radius: 8px;
+    padding: 14px 18px;
+    font-size: 13px;
+    color: #e06060;
+    margin-bottom: 16px;
+    display: none;
+  }
+
+  .btn-secondary {
+    background: transparent;
+    border: 1px solid #1e3057;
+    color: #8a9bb8;
+  }
+
+  .btn-secondary:hover {
+    background: #111e35;
+    border-color: #5b8dee;
+    color: #c8d8f0;
+  }
+
+  .divider {
+    border: none;
+    border-top: 1px solid #1e3057;
+    margin: 24px 0;
+  }
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="header">
+    <div class="brand">Apontando Caminhos</div>
+    <div class="title">Análise de Motivadores</div>
+    <div class="subtitle">Descubra o que verdadeiramente move você</div>
+  </div>
+
+  <div class="card">
+
+    <!-- ETAPA 1: DADOS -->
+    <div class="step active" id="step-dados">
+      <div class="step-label">Início</div>
+      <div class="step-title">Bem-vindo ao teste</div>
+      <div class="step-desc">Este teste identifica o que recarrega sua energia e o que a drena. Responda com sinceridade — não há respostas certas ou erradas.</div>
+      <div class="field">
+        <label>Seu nome</label>
+        <input type="text" id="input-nome" placeholder="Como você se chama?" />
+      </div>
+      <div class="field">
+        <label>Função profissional</label>
+        <input type="text" id="input-funcao" placeholder="Qual cargo ou função você exerce?" />
+      </div>
+      <button class="btn" onclick="iniciarTeste()">Começar o teste</button>
+    </div>
+
+    <!-- ETAPA 2: QUESTÕES -->
+    <div class="step" id="step-questoes">
+      <div class="progress-bar">
+        <div class="progress-fill" id="progress-fill" style="width:0%"></div>
+      </div>
+      <div class="question-counter" id="question-counter">Pergunta 1 de 35</div>
+      <div class="question-text" id="question-text"></div>
+      <div class="scale" id="scale">
+        <div class="scale-option" onclick="selecionarResposta(1)">
+          <div class="scale-num">1</div>
+          <div class="scale-label">Não me representa nada</div>
+        </div>
+        <div class="scale-option" onclick="selecionarResposta(2)">
+          <div class="scale-num">2</div>
+          <div class="scale-label">Me representa pouco</div>
+        </div>
+        <div class="scale-option" onclick="selecionarResposta(3)">
+          <div class="scale-num">3</div>
+          <div class="scale-label">Me representa parcialmente</div>
+        </div>
+        <div class="scale-option" onclick="selecionarResposta(4)">
+          <div class="scale-num">4</div>
+          <div class="scale-label">Me representa bastante</div>
+        </div>
+        <div class="scale-option" onclick="selecionarResposta(5)">
+          <div class="scale-num">5</div>
+          <div class="scale-label">Me representa totalmente</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ETAPA 3: GERANDO RELATÓRIO -->
+    <div class="step" id="step-loading">
+      <div class="loading">
+        <div class="spinner"></div>
+        <div class="loading-text" id="loading-text">Analisando seu perfil motivacional...</div>
+      </div>
+    </div>
+
+    <!-- ETAPA 4: RELATÓRIO GERADO -->
+    <div class="step" id="step-relatorio">
+      <div class="step-label">Concluído</div>
+      <div class="step-title">Seu relatório está pronto</div>
+      <div class="step-desc" style="margin-bottom:16px">Enviando automaticamente para o mentor. Você também pode copiar abaixo.</div>
+      <div class="success-msg" id="success-msg">Relatório enviado com sucesso para o seu mentor.</div>
+      <div class="error-msg" id="error-msg">Não foi possível enviar por email. Copie o relatório abaixo e encaminhe manualmente.</div>
+      <div class="report-box" id="report-box"></div>
+      <button class="btn" onclick="copiarRelatorio()">Copiar relatório</button>
+    </div>
+
+  </div>
+</div>
+
+<script>
+const PERGUNTAS = [
+  { id: 'DEF', texto: 'Você sente uma forte necessidade de superar metas difíceis e provar a si mesmo que consegue vencer obstáculos complexos?' },
+  { id: 'CUI', texto: 'As pessoas ao seu redor frequentemente recorrem a você quando precisam de apoio emocional ou acolhimento?' },
+  { id: 'CON', texto: 'Você sente realização quando consegue organizar processos, estruturar ideias e colocar as coisas em ordem prática?' },
+  { id: 'EXP', texto: 'Você sente que suas decisões e carreira são guiadas por um propósito maior que transcende o sucesso material?' },
+  { id: 'EXP', texto: 'Seus colegas costumam descrever você como alguém inquieto, curioso e que está sempre buscando novas experiências?' },
+  { id: 'CRI', texto: 'Para você, expressar sua individualidade e criar algo do zero é vital para se sentir motivado?' },
+  { id: 'CNT', texto: 'As pessoas o veem como alguém que transita facilmente entre grupos e cria pontes de relacionamento?' },
+  { id: 'CUI', texto: 'Você prioriza a harmonia do ambiente mesmo que isso exija colocar seus interesses em segundo plano?' },
+  { id: 'DEF', texto: 'Os outros enxergam você como uma pessoa competitiva, focada em resultados e que não foge de confrontos diretos?' },
+  { id: 'EXP', texto: 'As pessoas frequentemente o veem como alguém com visão ampla, que busca perspectivas transcendentais para os problemas?' },
+  { id: 'EXP', texto: 'Você sente incômodo com a rotina e é motivado pela liberdade de testar caminhos desconhecidos?' },
+  { id: 'CON', texto: 'Você é percebido como alguém focado em eficiência prática, estabilidade e entrega de resultados tangíveis?' },
+  { id: 'CNT', texto: 'Sentir-se conectado a um grupo e fazer parte de uma comunidade unida é um dos seus maiores combustíveis?' },
+  { id: 'CRI', texto: 'O mercado ou seu círculo social enxerga você como alguém original, inovador e com ideias fora da curva?' },
+  { id: 'DEF', texto: 'Diante de uma crise que ninguém resolve, você sente motivação imediata para assumir o controle e liderar a solução?' },
+  { id: 'CON', texto: 'Ter segurança, previsibilidade e bases sólidas é muito mais atraente para você do que correr riscos ousados?' },
+  { id: 'EXP', texto: 'Você dedica momentos regulares do seu dia para reflexão profunda buscando reabastecer sua energia interior?' },
+  { id: 'CUI', texto: 'As pessoas costumam apontá-lo como o principal pacificador da equipe, aquele que evita que conflitos destruam o clima?' },
+  { id: 'CNT', texto: 'Seus parceiros afirmam que sua maior força está em articular alianças e engajar pessoas em uma causa comum?' },
+  { id: 'EXP', texto: 'Você sente grande satisfação em estudar assuntos profundos e compreender a fundo o "porquê" das coisas?' },
+  { id: 'CRI', texto: 'É comum os outros elogiarem sua capacidade de improvisação ou a originalidade das suas soluções e ideias?' },
+  { id: 'CUI', texto: 'Seu dia a dia profissional só faz sentido se você perceber claramente que está ajudando e aliviando a dor de outras pessoas?' },
+  { id: 'DEF', texto: 'Você costuma ser apontado como alguém impaciente com processos lentos que prefere acelerar decisões mesmo sem todas as informações?' },
+  { id: 'EXP', texto: 'Os outros notam que você toma decisões importantes com base em princípios éticos ou intuições, não apenas na lógica material?' },
+  { id: 'CNT', texto: 'Você prefere ambientes colaborativos onde a sinergia entre pessoas importa mais do que a execução individual?' },
+  { id: 'EXP', texto: 'Os outros o veem como alguém que valoriza a independência, preferindo trabalhar de forma autônoma e sem supervisão?' },
+  { id: 'CRI', texto: 'Você se sente sufocado quando precisa seguir regras rígidas que limitem sua liberdade de pensar diferente?' },
+  { id: 'CON', texto: 'Os outros costumam elogiá-lo pela disciplina, organização e foco na execução de tarefas estruturadas?' },
+  { id: 'DEF', texto: 'Você busca posições de autoridade e destaque, sentindo-se confortável em assumir riscos que a maioria evitaria?' },
+  { id: 'EXP', texto: 'Você se move pela oportunidade de explorar novos territórios — geográficos, intelectuais ou de negócios — mesmo sem garantias?' },
+  { id: 'EXP', texto: 'Você sente que sua missão transcende o sucesso financeiro e está ligada a um propósito maior de contribuição?' },
+  { id: 'CNT', texto: 'Suas melhores ideias e maior produtividade acontecem quando está em reuniões, debates e interações diretas com pessoas?' },
+  { id: 'CON', texto: 'Você é frequentemente procurado para dar o veredito final em questões que exigem pragmatismo e viabilidade prática?' },
+  { id: 'CRI', texto: 'A necessidade de reinventar processos e encontrar formas não convencionais de fazer as coisas é constante nos seus projetos?' },
+  { id: 'EXP', texto: 'Os outros relatam que trabalhar com você desperta um sentimento de propósito e alinhamento com algo maior do que os resultados imediatos?' }
+];
+
+const GRUPOS = {
+  DEF: { nome: 'Desafiante', indices: [0,8,14,22,28] },
+  CON: { nome: 'Construtor', indices: [2,11,15,27,32] },
+  CRI: { nome: 'Criador',    indices: [5,13,20,26,33] },
+  CNT: { nome: 'Conector',   indices: [6,12,18,24,31] },
+  CUI: { nome: 'Cuidador',   indices: [1,7,17,21] },
+  EXP: { nome: 'Explorador', indices: [3,4,9,10,16,19,23,25,29,30,34] }
+};
+
+let nome = '', funcao = '';
+let questaoAtual = 0;
+let respostas = new Array(35).fill(null);
+let relatorioGerado = '';
+
+function mostrarStep(id) {
+  document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+
+function iniciarTeste() {
+  nome = document.getElementById('input-nome').value.trim();
+  funcao = document.getElementById('input-funcao').value.trim();
+  if (!nome || !funcao) {
+    alert('Por favor, preencha seu nome e função antes de continuar.');
+    return;
+  }
+  questaoAtual = 0;
+  mostrarStep('step-questoes');
+  exibirPergunta();
+}
+
+function exibirPergunta() {
+  const q = PERGUNTAS[questaoAtual];
+  document.getElementById('question-counter').textContent = `Pergunta ${questaoAtual + 1} de 35`;
+  document.getElementById('question-text').textContent = q.texto;
+  document.getElementById('progress-fill').style.width = `${(questaoAtual / 35) * 100}%`;
+  document.querySelectorAll('.scale-option').forEach(o => o.classList.remove('selected'));
+}
+
+function selecionarResposta(valor) {
+  respostas[questaoAtual] = valor;
+  const opcoes = document.querySelectorAll('.scale-option');
+  opcoes.forEach(o => o.classList.remove('selected'));
+  opcoes[valor - 1].classList.add('selected');
+
+  setTimeout(() => {
+    questaoAtual++;
+    if (questaoAtual < 35) {
+      exibirPergunta();
+    } else {
+      document.getElementById('progress-fill').style.width = '100%';
+      gerarRelatorio();
+    }
+  }, 350);
+}
+
+function calcularMedias() {
+  const medias = {};
+  for (const [chave, grupo] of Object.entries(GRUPOS)) {
+    const soma = grupo.indices.reduce((acc, i) => acc + (respostas[i] || 0), 0);
+    medias[chave] = +(soma / grupo.indices.length).toFixed(2);
+  }
+  return medias;
+}
+
+async function gerarRelatorio() {
+  mostrarStep('step-loading');
+
+  const medias = calcularMedias();
+  const ranking = Object.entries(medias)
+    .map(([chave, media]) => ({ chave, nome: GRUPOS[chave].nome, media }))
+    .sort((a, b) => b.media - a.media);
+
+  const dominantes = ranking.slice(0, 3);
+  const secundarios = ranking.slice(3);
+
+  const respostasTexto = PERGUNTAS.map((p, i) =>
+    `P${i+1} [${p.id}]: ${respostas[i]}`
+  ).join('\n');
+
+  const rankingTexto = ranking.map((r, i) =>
+    `${i+1}° ${r.nome}: ${r.media} — ${i < 3 ? 'Dominante' : 'Secundário'}`
+  ).join('\n');
+
+  const prompt = `Você é um especialista em análise motivacional baseada na Matriz Humana de Motivadores. Gere um relatório completo em português para o seguinte respondente:
+
+Nome: ${nome}
+Função: ${funcao}
+
+Respostas do teste (escala 1-5):
+${respostasTexto}
+
+Ranking calculado:
+${rankingTexto}
+
+Motivadores e o que significam:
+- Desafiante: recarrega com metas grandes, drena quando tudo é fácil
+- Construtor: recarrega com rotina sólida, drena quando tudo muda
+- Criador: recarrega com expressar e inovar, drena quando é podado
+- Conector: recarrega com gente e vínculo, drena quando fica isolado
+- Cuidador: recarrega com ajudar e servir, drena quando não vê impacto
+- Explorador: recarrega com novidade e liberdade, drena quando repete rotina
+
+Gere o relatório EXATAMENTE neste formato, sem markdown, sem asteriscos, sem símbolos especiais:
+
+RELATÓRIO DE PERFIL MOTIVACIONAL
+${nome} | ${funcao}
+
+VISÃO GERAL DO SEU PERFIL
+[3 a 4 linhas contextualizando nome, função e os 3 motivadores dominantes de forma fluida e personalizada]
+
+RANKING DOS SEUS MOTIVADORES
+${ranking.map((r, i) => `${i+1}° lugar — ${r.nome} | Média: ${r.media} | ${i < 3 ? 'Dominante' : 'Secundário'}`).join('\n')}
+
+ANÁLISE DOS 3 MOTIVADORES DOMINANTES
+
+${dominantes[0].nome} — Motivador Principal
+Recarrega com: [2 linhas conectando à função de ${nome}]
+Drena quando: [2 linhas com riscos reais no contexto profissional]
+No dia a dia como ${funcao}: [2 linhas com manifestações práticas]
+
+${dominantes[1].nome} — Segundo Motivador
+Recarrega com: [idem]
+Drena quando: [idem]
+No dia a dia como ${funcao}: [idem]
+
+${dominantes[2].nome} — Terceiro Motivador
+Recarrega com: [idem]
+Drena quando: [idem]
+No dia a dia como ${funcao}: [idem]
+
+PONTOS DE ATENÇÃO
+[2 a 3 riscos gerados pela combinação dos motivadores dominantes. Direto, sem suavizações]
+
+PLANO DE AÇÃO
+
+Ação 1 — [Título curto]
+[2 linhas conectando ao motivador dominante e à função de ${nome}]
+
+Ação 2 — [Título curto]
+[idem]
+
+Ação 3 — [Título curto]
+[idem]
+
+Ação 4 — [Título curto]
+[idem]
+
+Ação 5 — [Título curto]
+[idem]
+
+MENSAGEM FINAL
+[3 linhas. Tom direto e motivador. Usar o nome ${nome}. Conectar motivadores dominantes ao impacto na função]
+
+Análise gerada com base na Matriz Humana de Motivadores | Apontando Caminhos`;
+
+  try {
+    document.getElementById('loading-text').textContent = 'Gerando seu relatório personalizado...';
+
+    const response = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-6',
+        max_tokens: 1000,
+        messages: [{ role: 'user', content: prompt }]
+      })
+    });
+
+    const data = await response.json();
+    relatorioGerado = data.content[0].text;
+
+    document.getElementById('loading-text').textContent = 'Enviando para o mentor...';
+    await enviarEmail(relatorioGerado);
+
+  } catch (err) {
+    relatorioGerado = `Erro ao gerar relatório. Dados brutos:\n\nNome: ${nome}\nFunção: ${funcao}\n\n${rankingTexto}`;
+    mostrarRelatorio();
+    document.getElementById('error-msg').style.display = 'block';
+  }
+}
+
+async function enviarEmail(relatorio) {
+  const assunto = `Relatório de Motivadores — ${nome} | ${funcao}`;
+  const corpo = relatorio;
+
+  try {
+    const response = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-6',
+        max_tokens: 1000,
+        messages: [{
+          role: 'user',
+          content: `Envie um email para edsonluisdelima2@gmail.com com assunto "${assunto}" e o seguinte corpo:\n\n${corpo}\n\nResponda apenas: EMAIL_ENVIADO`
+        }]
+      })
+    });
+
+    mostrarRelatorio();
+    document.getElementById('success-msg').style.display = 'block';
+  } catch(e) {
+    mostrarRelatorio();
+    document.getElementById('error-msg').style.display = 'block';
+  }
+}
+
+function mostrarRelatorio() {
+  document.getElementById('report-box').textContent = relatorioGerado;
+  mostrarStep('step-relatorio');
+}
+
+function copiarRelatorio() {
+  navigator.clipboard.writeText(relatorioGerado).then(() => {
+    const btn = document.querySelector('#step-relatorio .btn');
+    btn.textContent = 'Copiado!';
+    setTimeout(() => btn.textContent = 'Copiar relatório', 2000);
+  });
+}
+</script>
+</body>
+</html>
